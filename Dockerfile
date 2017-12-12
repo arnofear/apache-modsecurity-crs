@@ -7,7 +7,6 @@ RUN apt-get update \
 && a2dismod status mpm_event \
 && a2enmod mpm_prefork authnz_ldap ldap proxy proxy_html proxy_http proxy_http2 proxy_wstunnel rewrite sed ssl expires headers http2 substitute slotmem_shm \
 && a2dissite 000-default \
-&& echo -e 'export APACHE_MYIP=$(hostname -i)\nexport APACHE_MYFQDN=$(hostname -f)' >> /etc/apache2/envvars \
 && apt-get clean ; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/* /usr/share/doc/*
 
 ENV APACHE_CONFDIR /etc/apache2
@@ -15,10 +14,11 @@ ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
 
 # logs should go to stdout / stderr
 RUN set -ex \
-	&& . "$APACHE_ENVVARS" \
-	&& ln -sfT /dev/stderr "$APACHE_LOG_DIR/error.log" \
-	&& ln -sfT /dev/stdout "$APACHE_LOG_DIR/access.log" \
-&& ln -sfT /dev/stdout "$APACHE_LOG_DIR/other_vhosts_access.log"
+&& . "$APACHE_ENVVARS" \
+&& ln -sfT /dev/stderr "$APACHE_LOG_DIR/error.log" \
+&& ln -sfT /dev/stdout "$APACHE_LOG_DIR/access.log" \
+&& ln -sfT /dev/stdout "$APACHE_LOG_DIR/other_vhosts_access.log" \
+&& echo -e 'export APACHE_MYIP=$(hostname -i)\nexport APACHE_MYFQDN=$(hostname -f)' >> /etc/apache2/envvars
 
 
 # chmod +x apache2-foreground docker-entrypoint.sh
