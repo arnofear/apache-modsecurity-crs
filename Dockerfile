@@ -17,7 +17,8 @@ RUN . "$APACHE_ENVVARS" \
 && ln -sfT /dev/stderr "$APACHE_LOG_DIR/error.log" \
 && ln -sfT /dev/stdout "$APACHE_LOG_DIR/access.log" \
 && ln -sfT /dev/stdout "$APACHE_LOG_DIR/other_vhosts_access.log" \
-&& echo -e 'export APACHE_MYIP=$(hostname -i)\nexport APACHE_MYFQDN=$(hostname -f)' >> /etc/apache2/envvars
+&& echo 'export APACHE_MYIP=$(hostname -i)' >> "$APACHE_CONFDIR/envvars" \
+&& echo 'export APACHE_MYFQDN=$(hostname -f)' >> "$APACHE_CONFDIR/envvars"
 
 
 # chmod +x apache2-foreground docker-entrypoint.sh
