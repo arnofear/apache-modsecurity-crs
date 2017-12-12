@@ -13,8 +13,7 @@ ENV APACHE_CONFDIR /etc/apache2
 ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
 
 # logs should go to stdout / stderr
-RUN set -ex \
-&& . "$APACHE_ENVVARS" \
+RUN . "$APACHE_ENVVARS" \
 && ln -sfT /dev/stderr "$APACHE_LOG_DIR/error.log" \
 && ln -sfT /dev/stdout "$APACHE_LOG_DIR/access.log" \
 && ln -sfT /dev/stdout "$APACHE_LOG_DIR/other_vhosts_access.log" \
